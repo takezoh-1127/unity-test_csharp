@@ -6,7 +6,32 @@ using UnityEngine;
 
 //#define _ENABLE_HOGE		// ファイルの先頭で宣言しないとエラーになる.
 
+
+// ジェネリッククラス.
+class GenericClass<T>
+{
+	T item;
+
+	public void SetItem(T v)
+	{
+		item = v;
+	}
+
+	public T GetItem()
+	{
+		return item;
+	}
+}
+
 public class Main : MonoBehaviour {
+
+	private enum AttackAttr
+	{
+		None = 0,
+
+		Grapple = 0x01,
+		Shoot = 0x01 << 1,		// シフト演算子もOK.
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -231,6 +256,36 @@ public class Main : MonoBehaviour {
 			{
 				Debug.LogFormat("  [{0}] : [{1}]", pair.Key, pair.Value);
 			}
+		}
+
+		// ジェネリック.
+		{
+			GenericClass<int> i = new GenericClass<int>();
+
+			i.SetItem(5);
+
+			Debug.LogFormat("  i:[{0}]", i.GetItem());
+
+			GenericClass<float> f = new GenericClass<float>();
+
+			f.SetItem(10.0f);
+
+			Debug.LogFormat("  f:[{0}]", f.GetItem());
+		}
+
+		// enum
+		{
+			Debug.Log("### enum");
+
+			Debug.LogFormat("  AttackAttr Grapple:[0x{0:x}]", AttackAttr.Grapple);
+			Debug.LogFormat("  AttackAttr Shoot  :[0x{0:x}]", AttackAttr.Shoot);
+
+			Debug.LogFormat("  ElementAttr Fire   : [0x{0:x}]", ElementAttr.Fire);
+			Debug.LogFormat("  ElementAttr Warter : [0x{0:x}]", ElementAttr.Water);
+
+			Debug.LogFormat("  PhysicsAttackAttr Slash : [{0:d}]", GameConst.PhysicsAttackAttr.Slash);
+			Debug.LogFormat("  PhysicsAttackAttr Blow  : [{0:d}]", GameConst.PhysicsAttackAttr.Blow);
+			Debug.LogFormat("  PhysicsAttackAttr Spear : [{0:d}]", GameConst.PhysicsAttackAttr.Spear);
 		}
 	}
 	
