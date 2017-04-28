@@ -7,6 +7,64 @@ using UnityEngine;
 //#define _ENABLE_HOGE		// ファイルの先頭で宣言しないとエラーになる.
 
 
+// 自分でクラスを定義してみる.
+public class Hoge
+{
+	public Hoge()
+	{
+		Debug.Log("### Hoge::Hoge()");
+	}
+
+	// デストラクタ.
+	// publicを付けるとビルドエラーになる.
+	~Hoge()
+	{
+		Debug.Log("### Hoge::~Hoge()");
+	}
+
+	public int x = 0;
+
+	public void SetY(int i)
+	{
+		y = i;
+	}
+
+	public int GetY()
+	{
+		return y;
+	}
+
+	// プロパティ.
+	// 自動プロパティ.
+	public int X { get; set; }
+
+	public int Z
+	{
+		// setアクセサ（setterとも言う）.
+		set
+		{
+			// valueという名前の変数に代入された値が入る.
+			if(!(value >= 0 && value <= 10))
+			{
+				Debug.Assert(false);
+				return;
+			}
+			
+			z = value;
+		}
+
+		// getアクセサ（getterとも言う）.
+		get
+		{
+			return z;
+		}
+	}
+
+	private int y = -1;
+	private int z = 0;
+}
+
+
 // ジェネリッククラス.
 class GenericClass<T>
 {
@@ -286,6 +344,83 @@ public class Main : MonoBehaviour {
 			Debug.LogFormat("  PhysicsAttackAttr Slash : [{0:d}]", GameConst.PhysicsAttackAttr.Slash);
 			Debug.LogFormat("  PhysicsAttackAttr Blow  : [{0:d}]", GameConst.PhysicsAttackAttr.Blow);
 			Debug.LogFormat("  PhysicsAttackAttr Spear : [{0:d}]", GameConst.PhysicsAttackAttr.Spear);
+		}
+
+		// if
+		{
+			int i = 0;
+
+			// ↓NG
+			// 数値ではエラーになる.
+			//if (i)
+			//{
+				//Debug.Log("### check:0");
+			//}
+
+			// ↓OK
+			if(i==0)
+			{
+				Debug.Log("### check:0");
+			}
+
+			// ビット演算だと判定が冗長になってしまう...
+			ElementAttr attr = ElementAttr.None;
+
+			attr = ElementAttr.Fire;
+
+			// ↓NG
+			// ビット演算ではboolにならない.
+			//if(attr & ElementAttr.Fire)
+			//{
+			//}
+
+			// ↓OK
+			if((attr & ElementAttr.Fire) == ElementAttr.Fire)
+			{
+				Debug.Log("### 火属性.");
+			}
+
+			attr = ElementAttr.Water | ElementAttr.Light;
+
+			if((attr & ElementAttr.Water) == ElementAttr.Water)
+			{
+				Debug.Log("### 水属性.");
+			}
+
+			if((attr & (ElementAttr.Water | ElementAttr.Light)) == (ElementAttr.Water | ElementAttr.Light))
+			{
+				Debug.Log("### 水＆光属性.");
+			}
+
+			// 良いかどうかは置いておいて次の様な書き方でも判定できる.
+			if((attr & (ElementAttr.Water | ElementAttr.Light)) != 0)
+			{
+				Debug.Log("### 水＆光属性.");
+			}
+		}
+
+		// クラス.
+		{
+			Hoge hoge = new Hoge();
+
+			hoge.SetY(10);
+
+			Debug.LogFormat("  x:[{0}]", hoge.x);
+			Debug.LogFormat("  z:[{0}]", hoge.GetY());
+
+			// プロパティ.
+			hoge.X = 100;
+
+			Debug.LogFormat("  X:[{0}]", hoge.X);
+
+			// エラーが拾える.
+			hoge.Z = 100;
+
+			Debug.LogFormat("  Z:[{0}]", hoge.Z);
+
+			hoge.Z = 10;
+
+			Debug.LogFormat("  Z:[{0}]", hoge.Z);
 		}
 	}
 	
