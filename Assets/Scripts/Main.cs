@@ -81,6 +81,19 @@ class GenericClass<T>
 	}
 }
 
+// 自分で構造体を定義してみる.
+public struct Point
+{
+	public int x;
+	public int y;
+
+	public Point(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+}
+
 public class Main : MonoBehaviour {
 
 	private enum AttackAttr
@@ -421,6 +434,13 @@ public class Main : MonoBehaviour {
 			hoge.Z = 10;
 
 			Debug.LogFormat("  Z:[{0}]", hoge.Z);
+		}
+
+		// 構造体.
+		{
+			Point point = new Point(10, 20);
+
+			Debug.LogFormat("  x:[{0}] y:[{1}]", point.x, point.y);
 		}
 	}
 	
