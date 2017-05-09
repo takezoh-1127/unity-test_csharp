@@ -104,6 +104,14 @@ public class Main : MonoBehaviour {
 		Shoot = 0x01 << 1,		// シフト演算子もOK.
 	}
 
+	public class A { }
+	public class B { }
+	public class D : B { }
+
+	public interface I1 { }
+	public interface I2 { }
+	public class E : I1, I2 { }
+
 	// Use this for initialization
 	void Start () {
 		// そもそも使える型は？
@@ -441,6 +449,63 @@ public class Main : MonoBehaviour {
 			Point point = new Point(10, 20);
 
 			Debug.LogFormat("  x:[{0}] y:[{1}]", point.x, point.y);
+		}
+
+		// キャスト.
+		{
+			int i = 10;
+			float f = 100.0f;
+
+			f = i;
+
+			// ↓コンパイルエラーになる.
+			//i = f;
+
+			// ↓明示的なキャストが必要.
+			i = (int)f;
+		}
+
+		{
+			D d = new D();
+
+			B b = d;    // キャストは不要.
+		}
+
+		{
+			E e = new E();
+
+			I1 i1 = e;  // キャストは不要.
+			I2 i2 = e;  // キャストは不要.
+		}
+
+		{
+			B b = new D();
+
+			D d = (D)b;		// 明示的なキャストが必要.
+		}
+
+		{
+			A a = new A();
+
+			//B b = (B)a;
+		}
+
+		// as演算子.
+		{
+			A a = new A();
+
+			B b = (object)a as B;
+
+			if(b == null)
+			{
+				Debug.LogFormat("### can not change A -> B.");
+			}
+		}
+
+		{
+			I1 i1 = new E();
+			I2 i2 = i1 as I2;
+			E e = i2 as E;
 		}
 	}
 	
