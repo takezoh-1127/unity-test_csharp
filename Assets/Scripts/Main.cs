@@ -94,6 +94,16 @@ public struct Point
 	}
 }
 
+// 拡張メソッド.
+// stringにExtMethodというメソッドを追加してみる.
+public static class StringExtend
+{
+	public static void ExtMethod(this string self)
+	{
+		Debug.LogFormat("### string.ExtMethod() : [{0}]", self);
+	}
+}
+
 public class Main : MonoBehaviour {
 
 	private enum AttackAttr
@@ -506,6 +516,15 @@ public class Main : MonoBehaviour {
 			I1 i1 = new E();
 			I2 i2 = i1 as I2;
 			E e = i2 as E;
+		}
+
+		// 拡張メソッド.
+		{
+			string str;
+
+			str = "aaa";
+
+			str.ExtMethod();
 		}
 	}
 	
